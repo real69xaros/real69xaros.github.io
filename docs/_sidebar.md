@@ -12,5 +12,4 @@
 - **Operating it**
   - [Runbook](runbook.md)
 
-- **Meta**
-  - [Hosting these docs](deploy.md)
+
