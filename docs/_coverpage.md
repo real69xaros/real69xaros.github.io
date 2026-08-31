@@ -7,5 +7,5 @@
 - **Whitelist API** — for when your own systems break the rules
 - **One master switch** — stop enforcing without stopping the logging
 
-[Get started](#/install)
-[API reference](#/api)
+[Get started](https://real69xaros.github.io/#/?id=how-it-is-put-together)
+[API reference](https://real69xaros.github.io/#/install)
