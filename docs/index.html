@@ -64,7 +64,7 @@
   <!--
     Shim to avoid Uncaught SyntaxError: Failed to execute 'querySelector' on 'Document': '#/install' is not a valid selector.
     Some versions/plugins call querySelector with raw hashes like '#/install' which are invalid CSS selectors
-    because of the slash. This shim catches that specific error and falls back to document.getElementById.
+    because of the slash. This shim catches that specific error and falls back to getElementById.
     Inserted before docsify scripts so it intercepts their calls.
   -->
   <script>
@@ -101,5 +101,46 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-lua.min.js"></script>
+  <!--
+    Fallback click handler: some environments or plugins may not initialize docsify's click interception.
+    This handler ensures anchors with hrefs like "#/install" and "#/api" still navigate by setting location.hash
+    and dispatching a hashchange event so docsify (if running) picks it up.
+  -->
+  <script>
+    (function () {
+      function onDocClick(e) {
+        try {
+          var a = e.target;
+          while (a && a.nodeName !== 'A') a = a.parentNode;
+          if (!a || !a.getAttribute) return;
+          var href = a.getAttribute('href');
+          if (!href) return;
+          // Only handle internal docsify-style hashes like #/something
+          if (href.indexOf('#/') === 0) {
+            e.preventDefault();
+            // If the hash is already set, still dispatch a hashchange so routers respond.
+            if (location.hash !== href) {
+              location.hash = href;
+            } else {
+              // same hash -> manually emit hashchange
+              try {
+                window.dispatchEvent(new HashChangeEvent('hashchange'));
+              } catch (err) {
+                // older browsers
+                var ev = document.createEvent('Event');
+                ev.initEvent('hashchange', true, true);
+                window.dispatchEvent(ev);
+              }
+            }
+          }
+        } catch (err) {
+          // don't break page interactions
+          console.error('docs: navigation fallback error', err);
+        }
+      }
+
+      document.addEventListener('click', onDocClick, false);
+    })();
+  </script>
 </body>
 </html>
