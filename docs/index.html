@@ -61,6 +61,42 @@
       }
     }
   </script>
+  <!--
+    Shim to avoid Uncaught SyntaxError: Failed to execute 'querySelector' on 'Document': '#/install' is not a valid selector.
+    Some versions/plugins call querySelector with raw hashes like '#/install' which are invalid CSS selectors
+    because of the slash. This shim catches that specific error and falls back to document.getElementById.
+    Inserted before docsify scripts so it intercepts their calls.
+  -->
+  <script>
+    (function () {
+      function makeSafe(orig) {
+        return function (selector) {
+          try {
+            return orig.call(this, selector);
+          } catch (err) {
+            // If selector is a string that starts with '#' (e.g. '#/install'), try fallback using getElementById
+            if (typeof selector === 'string' && selector.length > 1 && selector.charAt(0) === '#') {
+              try {
+                var id = selector.slice(1); // remove leading '#'
+                // document.getElementById accepts IDs with slashes and other characters that are invalid in CSS selectors
+                return document.getElementById(id);
+              } catch (e2) {
+                // ignore and rethrow original error
+              }
+            }
+            throw err;
+          }
+        };
+      }
+
+      if (typeof Document !== 'undefined' && Document.prototype && Document.prototype.querySelector) {
+        Document.prototype.querySelector = makeSafe(Document.prototype.querySelector);
+      }
+      if (typeof Element !== 'undefined' && Element.prototype && Element.prototype.querySelector) {
+        Element.prototype.querySelector = makeSafe(Element.prototype.querySelector);
+      }
+    })();
+  </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
