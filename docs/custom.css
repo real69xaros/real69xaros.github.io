@@ -1,0 +1,177 @@
+/* XIS AntiCheat docs — palette + dark mode over the docsify vue theme */
+
+:root{
+  --theme-color:#0C6F6A;
+  --ground:#F7F9F9;
+  --surface:#FFFFFF;
+  --surface-2:#EDF2F2;
+  --line:#D3DEDE;
+  --ink:#101819;
+  --body:#3C4A4C;
+  --muted:#6B7A7C;
+  --accent:#0C6F6A;
+  --accent-soft:#E2F1F0;
+  --code-bg:#0E1719;
+  --code-ink:#D6E4E4;
+  --sev-low:#2A6BA8;
+  --sev-medium:#A9661A;
+  --sev-high:#B93B2C;
+  --sev-critical:#7A1D13;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0C1213;
+    --surface:#121A1B;
+    --surface-2:#182223;
+    --line:#263435;
+    --ink:#EAF2F2;
+    --body:#B9C7C8;
+    --muted:#849798;
+    --accent:#42B8AF;
+    --theme-color:#42B8AF;
+    --accent-soft:#122E2C;
+    --code-bg:#080E0F;
+    --code-ink:#CFE0E0;
+    --sev-low:#5B9DD6;
+    --sev-medium:#D3922F;
+    --sev-high:#E4695A;
+    --sev-critical:#B4402F;
+  }
+}
+
+body{background:var(--ground);color:var(--body);
+  font-family:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif}
+.markdown-section{color:var(--body);max-width:900px}
+.markdown-section h1,.markdown-section h2,
+.markdown-section h3,.markdown-section h4{
+  font-family:Archivo,"IBM Plex Sans",sans-serif;color:var(--ink);
+  text-wrap:balance;letter-spacing:-.01em}
+.markdown-section h1{font-weight:700}
+.markdown-section h2{font-weight:600;border-bottom:1px solid var(--line);padding-bottom:8px;margin-top:2.2em}
+.markdown-section h3{font-weight:600;font-size:1.15rem}
+.markdown-section p,.markdown-section li{line-height:1.65}
+.markdown-section strong{color:var(--ink)}
+.markdown-section a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+.markdown-section a:hover{border-bottom-color:var(--accent)}
+.markdown-section hr{border-color:var(--line)}
+
+/* sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--line)}
+.sidebar .app-name-link{font-family:Archivo,sans-serif;font-weight:700;color:var(--ink)}
+.sidebar ul li a{color:var(--muted);border-bottom:0}
+.sidebar ul li a:hover{color:var(--ink)}
+.sidebar ul li.active>a,.sidebar ul li>a.active{color:var(--accent);font-weight:600;border-right:0}
+.sidebar-toggle{background:transparent}
+.sidebar-toggle .sidebar-toggle-button span{background-color:var(--accent)}
+body .sidebar-toggle{background-color:var(--ground)}
+
+/* code */
+.markdown-section pre,.markdown-section pre>code{
+  background:var(--code-bg);color:var(--code-ink);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.83rem;line-height:1.62}
+.markdown-section pre{border-radius:8px;border:1px solid rgba(255,255,255,.06)}
+.markdown-section pre::after{color:var(--muted);opacity:.55}
+.markdown-section code{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.markdown-section p>code,.markdown-section li>code,.markdown-section td>code{
+  background:var(--surface-2);color:var(--ink);border:1px solid var(--line);
+  border-radius:4px;font-size:.86em;padding:.1em .38em}
+.token.comment{color:#7E9695}
+.token.string{color:#9FD1A4}
+.token.keyword,.token.boolean,.token.number{color:#7FC7C0}
+.token.function{color:#D9A85C}
+.token.operator,.token.punctuation{color:#8FA5A4}
+.token.property,.token.constant{color:#C9DCDB}
+
+/* tables — the frame lives on .table-scroll (injected by the hook in index.html)
+   so the table itself can stay display:table and still scroll on narrow screens. */
+.table-scroll{
+  overflow-x:auto;max-width:100%;margin:0 0 1.2rem;
+  border:1px solid var(--line);border-radius:8px;background:var(--surface);
+  -webkit-overflow-scrolling:touch}
+.markdown-section table{
+  display:table;width:100%;border-collapse:collapse;border:0;margin:0;
+  background:transparent;font-size:.92rem}
+.markdown-section th{background:var(--surface-2);color:var(--muted);
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.09em;
+  text-transform:uppercase;font-weight:600;border:0;
+  border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.markdown-section td{border:0;border-bottom:1px solid var(--line);
+  color:var(--body);vertical-align:top}
+.markdown-section tr:last-child td{border-bottom:0}
+.markdown-section tr:nth-child(2n){background:transparent}
+.markdown-section td[align="right"]{text-align:right;font-variant-numeric:tabular-nums}
+
+/* docsify alerts: ?> tip  !> important
+   docsify's own rules are p.tip / p.warn (specificity 0,2,1), so these must
+   qualify the element too or they silently lose and you get its light theme. */
+.markdown-section p.tip{
+  background:var(--accent-soft);border-left:4px solid var(--accent);
+  color:var(--body);border-radius:0 7px 7px 0}
+.markdown-section p.tip::before{
+  background-color:var(--accent);font-family:"IBM Plex Mono",monospace}
+.markdown-section p.tip code{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.markdown-section p.tip a{color:var(--accent)}
+.markdown-section p.warn{
+  background:color-mix(in srgb,var(--sev-high) 10%,var(--surface));
+  border-left:4px solid var(--sev-high);color:var(--body);border-radius:0 7px 7px 0}
+.markdown-section p.warn::before{background-color:var(--sev-high)}
+.markdown-section p.warn strong{color:var(--ink)}
+.markdown-section p.warn code{background:var(--surface);color:var(--ink);border-color:var(--line)}
+
+/* blockquote continuation lines inside a callout */
+.markdown-section blockquote{background:var(--surface-2);border-left:4px solid var(--line);
+  color:var(--body);border-radius:0 7px 7px 0}
+.markdown-section blockquote p{color:var(--body)}
+
+/* search */
+.sidebar .search{border-bottom:1px solid var(--line);margin-bottom:14px}
+.sidebar .search input{background:var(--surface-2);color:var(--ink);
+  border:1px solid var(--line);border-radius:7px;padding:8px 10px;
+  font-family:"IBM Plex Mono",monospace;font-size:.8rem}
+.sidebar .search .results-panel{background:transparent;color:var(--body)}
+.sidebar .search h2,.sidebar .search p{color:var(--muted)}
+.sidebar .search .matching-post{border-bottom:1px solid var(--line)}
+.sidebar .search .search-keyword{color:var(--accent);background:var(--accent-soft);font-style:normal}
+.sidebar .search .clear-button{cursor:pointer}
+
+/* cover page */
+section.cover{background:var(--ground)!important}
+section.cover.show{background:var(--ground)!important}
+section.cover .cover-main{max-width:44rem;margin:0 auto;text-align:center}
+section.cover h1,section.cover .cover-main>h1{
+  font-family:Archivo,sans-serif;font-weight:700;color:var(--ink);
+  letter-spacing:-.02em;margin-bottom:.5rem}
+section.cover h1 a,section.cover .cover-main>h1 a{color:var(--ink)}
+section.cover blockquote{
+  background:transparent;border-left:0;color:var(--muted);
+  font-size:1.2rem;line-height:1.5;margin:0 0 1.6rem}
+section.cover blockquote p{color:var(--muted);font-size:1.2rem}
+section.cover .cover-main ul{
+  display:inline-block;text-align:left;list-style:none;padding:0;margin:0 0 2rem}
+section.cover .cover-main ul li{
+  color:var(--body);line-height:1.6;padding-left:1.1em;position:relative}
+section.cover .cover-main ul li::before{
+  content:"—";position:absolute;left:0;color:var(--accent)}
+section.cover .cover-main ul li strong{color:var(--ink)}
+/* docsify styles the LAST link as the filled one; make the first filled instead */
+section.cover .cover-main>p:last-child a{
+  border-radius:7px;border:1px solid var(--accent);color:var(--accent);
+  background:transparent;font-weight:600;padding:.6rem 1.4rem}
+section.cover .cover-main>p:last-child a:hover{background:var(--accent-soft);color:var(--accent)}
+section.cover .cover-main>p:last-child a:last-child{background:transparent;color:var(--accent);border-color:var(--accent)}
+section.cover .cover-main>p:last-child a:last-child:hover{background:var(--accent-soft);color:var(--accent)}
+section.cover .cover-main>p:last-child a:first-child{
+  background:var(--accent);color:var(--ground);border-color:var(--accent)}
+section.cover .cover-main>p:last-child a:first-child:hover{
+  background:var(--accent);color:var(--ground);opacity:.86}
+
+/* severity chips, written as inline HTML in markdown */
+.sev{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;
+  font-weight:600;letter-spacing:.05em;padding:2px 7px;border-radius:4px;
+  border:1px solid currentColor;white-space:nowrap}
+.sev.low{color:var(--sev-low)}
+.sev.med{color:var(--sev-medium)}
+.sev.high{color:var(--sev-high)}
+.sev.crit{color:var(--sev-critical);background:color-mix(in srgb,var(--sev-critical) 12%,transparent)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
