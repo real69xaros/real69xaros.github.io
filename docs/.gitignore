@@ -1,0 +1,10 @@
+# Never publish the internal detector reference: detector ids, severities, gates and
+# confirm windows are a bypass guide, and this repo is a PUBLIC GitHub Pages site whose
+# root is this docs/ folder.
+#
+# WARNING: this file only protects pushes made through git. GitHub's web
+# "Add files via upload" does NOT consult .gitignore -- that is how
+# docs/internal/detector-reference.md reached the live site in commit 1e1e6ce.
+internal/
+*.internal.md
+NOTES.md
