@@ -67,25 +67,35 @@ players.
 The server prints a summary. It looks like this:
 
 ```
-[XIS AntiCheat] v3 online | 74 detectors | 12 heartbeat slots | bans on, threshold 3
+[XIS AntiCheat] v3 online | 74 detectors | 12 heartbeat slots | bans on, threshold 3 | enforcement ARMED
 [XIS AntiCheat] 2 detector(s) DISABLED by config:
    - <one detector> (action = IGNORE)
    - <another detector> (gate AntiESP is off)
-[XIS AntiCheat] v3 server ready in 0.008s
+[XIS AntiCheat] v3 server ready in 0.010s
 ```
 
 - **Detector count** — if it is not 74, the registry did not load cleanly and you are
   running with gaps.
 - **Heartbeat slots** — must match the number of slots the client build sends. A mismatch
   makes a slot look permanently frozen, which ejects players after the startup grace.
-- **Ban mode** — confirms whether bans are armed and at what strike threshold.
+- **Ban mode** — whether bans are armed, and at what strike threshold.
+- **Enforcement** — `ARMED` or `REPORT-ONLY`. Check this before every populated session.
 - **Disabled list** — printed every boot on purpose, so a detector can never be off by
   accident. Anything unexpected in that list is a config mistake.
 
-!> **Enforcement mode is NOT printed.** There is no boot line telling you whether you are
-in report-only mode, so do not go looking for one — check `CFG.EnforcementEnabled` in
-`XIS_Report` directly. This is the single most useful thing to be certain of before a
-populated session, and it is the one thing the boot summary does not say.
+In report-only mode the same line reads `enforcement REPORT-ONLY`, and a second warning
+follows it, because report-only is easy to leave switched on by accident after an install
+or an incident:
+
+```
+[XIS AntiCheat] v3 online | 74 detectors | 12 heartbeat slots | bans on, threshold 3 | enforcement REPORT-ONLY
+[XIS AntiCheat] REPORT-ONLY: every detector is clamped to REPORT. Nothing will kick or ban.
+Set CFG.EnforcementEnabled = true in XIS_Report to arm it.
+```
+
+?> Enforcement mode is also carried on the `_status` attribute, which refreshes every 5
+seconds. Prefer that one if you have changed the switch since the server started — the boot
+line records only what was true at startup.
 
 You can also read the `_status` attribute on the `XIS_Server_v3` script in the Properties pane
 for a live one-line health check without opening the console.

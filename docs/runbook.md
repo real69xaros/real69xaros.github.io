@@ -32,7 +32,10 @@ question.
 
 ## Checking it is alive
 
-- Read the `_status` attribute on the `XIS_Server_v3` script in the Properties pane.
+- Read the `_status` attribute on the `XIS_Server_v3` script in the Properties pane. It
+  reads e.g. `3 session(s) | 74 detectors | persistent (SQLStore) | enforcement ARMED` and
+  refreshes every 5 seconds — so it is the fastest way to confirm whether you are actually
+  enforcing, including after you have flipped the switch mid-session.
 - Or call `_G.XIS_Diag()` from the server console.
 - At boot the server prints its detector count, heartbeat slots, ban mode and everything the
   config has switched off.
