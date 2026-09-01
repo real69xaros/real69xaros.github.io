@@ -39,9 +39,10 @@ actually happened without ever having told them.
 ## What a report contains
 
 Each embed carries the detector, the evidence values that triggered it, the player's device and
-ping, and the **run-up**: the last N detections for that player that were not themselves
-reported. The run-up is usually the most useful part — a single `KICK` with four `LOG` entries
-behind it tells a very different story from one with none.
+ping, and — on a **kick or ban only** — the **run-up**: the last N detections for that player
+that were not themselves reported. Plain `REPORT` embeds do not carry it, because the history is
+consumed when it is attached. The run-up is usually the most useful part: a single kick with four
+quiet `LOG` entries behind it tells a very different story from one with none.
 
 ## Bans
 

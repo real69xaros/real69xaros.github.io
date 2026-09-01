@@ -77,18 +77,56 @@ vehicles, launch pads and 60 players; tighten them if your game is more constrai
 
 ```lua
 Movement = {
-    maxSpeed          = 120,   -- studs/sec before the speed check fires
-    maxWalkSpeed      = 40,    -- Humanoid.WalkSpeed ceiling
-    maxAirTime        = 6,     -- seconds airborne
-    teleportDelta     = 180,   -- studs in one sample
-    minCheckDt        = 0.05,  -- sample interval
-    minKickSev        = 6,     -- severity needed to accumulate toward a kick
-    spawnGraceSeconds = 5,     -- checks suspended after spawn/respawn
+    -- SAMPLING
+    serverHz, bufSize, minDt, maxDt, minCheckDt
+
+    -- SPEED. The effective cap is
+    --   maxSpeed * speedMult + speedMargin
+    -- NOT maxSpeed alone. maxSpeed is also the
+    -- WalkSpeed ceiling, so it must clear your
+    -- sprint speed.
+    defaultSpeed, maxSpeed, speedMult, speedMargin, speedStreak
+
+    -- TELEPORT / ACCELERATION
+    maxTeleport, maxAccel, accelStreak
+
+    -- AIR AND HOVER
+    maxAirTime, hoverTopY, hoverHoldFrames, hoverHoldHorizSpeed, fastFallY
+
+    -- GRACE WINDOWS. Lower spawnGrace and your
+    -- own respawn logic starts producing false
+    -- teleport reports.
+    spawnGrace, landingGrace
+
+    -- NOCLIP RAY
+    noclipMinCast, wallNormalY
+
+    -- SCORING. A check accumulates toward a kick
+    -- only at severity >= minKickSev, and only
+    -- when it is "correctable" (requireFix).
+    -- Rotation checks deliberately are not, so
+    -- raising their severity alone does nothing.
+    kickScore, minKickSev, requireFix, scoreDecay, punishDecay
+
+    -- PER-CHECK TOGGLES
+    speed, teleport, accel, airTime, noclip, physics, ownership, desync
 }
 ```
 
-!> `spawnGraceSeconds` protects against your own respawn logic. Lower it and you will start
-seeing false teleport reports every time someone dies.
+?> **The shipped values are in the `config` module, and that is the source of truth.**
+They are deliberately not printed here: this documentation is published on a public site,
+and a speed cap or teleport threshold is exactly what someone needs in order to stay
+underneath it. Open the module to see what your copy is set to.
+
+!> **Two things the boot log will not tell you.** The `DISABLED by config` list covers
+gates and registry actions only -- it does **not** cover the per-check toggles above. Some
+of them ship `false`, so a check you assume is protecting you may not be running. Read the
+`Movement` table directly and confirm. Second, the effective speed cap is a product of
+three fields, so reading `maxSpeed` alone will mislead you.
+
+!> `spawnGrace` protects you from your own respawn logic, and `landingGrace` from your own
+jump arcs. Lower either and you will start seeing false teleport reports every time somebody
+dies or lands. Note the key is `spawnGrace`, not `spawnGraceSeconds`.
 
 ## Tuning what a detection costs
 

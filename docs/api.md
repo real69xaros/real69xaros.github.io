@@ -90,9 +90,10 @@ _G.XIS_HitValidation.status()                  -- reads the LIVE values back
 | `pos` | Hits claimed where the server never saw the target |
 | `range` | Hits beyond the weapon's range |
 
-?> `setKickOnStrikes(false)` is the useful middle setting for a new install: bad hits are still
-declined so cheaters get no damage, but nobody is removed while you are still learning your
-own false-positive rate.
+?> **This already ships `false`.** Hit validation declines bad hits from the start, so a
+cheater gets no damage, but nobody is removed for repeats until you opt in. That is the right
+default and worth leaving alone until you know your own false-positive rate — a tuning mistake
+here fires once per shot, which is how a single bad threshold becomes a mass kick.
 
 ## Whole-player exemptions
 
@@ -128,5 +129,11 @@ print(_G.XIS_MovementStats())
 snap-backs, spin and anti-aim hits, fling streaks — which is what you want when tuning
 thresholds against a real session.
 
-!> Both are server-VM only. `_G` is per-VM in Roblox, so a plugin, a client script or a
-separate actor cannot see these. If a call returns `nil`, you are in the wrong VM.
+!> **`_G` is per-VM, and this bites harder than it sounds.** Measured directly: with the
+game running, `RunService:IsServer()` returns `true` and the anticheat is demonstrably alive,
+yet **every** `_G.XIS_*` global reads `nil` from a plugin context. The same applies to an
+Actor (parallel Luau) and to any framework that sandboxes its scripts.
+>
+> So `_G.XIS_Whitelist.add(...)` works from an ordinary server `Script` and throws a nil-index
+> from an Actor, with nothing to tell you why. If a call returns `nil`, you are in a different
+> VM — not looking at a failed install. Keep whitelist calls in plain server scripts.

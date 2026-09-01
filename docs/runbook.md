@@ -49,15 +49,18 @@ _G.XIS_Whitelist.add(player, "fly", 3)
 ```
 
 Raising a threshold is the right move only when you have measured that legitimate play genuinely
-reaches it — a vehicle that actually does 140 studs/sec, for instance.
+reaches it — a vehicle that genuinely outruns the cap, for instance.
 
 ## Players report being kicked during lag spikes
 
 Movement checks read positions the server already has, so a client that stalls and then
 catches up looks briefly like a teleport. Two things to check:
 
-1. `spawnGraceSeconds` — if respawn logic is involved, this is usually the fix.
+1. `spawnGrace` and `landingGrace` — if a respawn or a landing is involved, this is usually
+   the fix.
 2. `minKickSev` — raising it means low-severity movement hits stop accumulating toward a kick.
+3. `maxTeleport` — the studs-in-one-sample threshold. A client that stalls and catches up
+   moves a long way in one sample, so this is the field a lag spike actually trips.
 
 If it is widespread rather than per-player, it is your server's frame time, not the anticheat.
 `_G.XIS_MovementStats()` reports hitch counts, which will tell you which it is.
